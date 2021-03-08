@@ -1,14 +1,19 @@
 const path = require('path');
 const { merge } = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const common = require('./webpack.common.js');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const ROOT_DIRECTORY = process.cwd();
 
 module.exports = merge(common, {
   mode: 'production',
-  devtool: 'source-map',
+  devtool: false,
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(ROOT_DIRECTORY, 'build'),
+    publicPath: ''
+  },
   module: {
     rules: [
       {
@@ -37,24 +42,17 @@ module.exports = merge(common, {
       }
     ]
   },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        test: /\.js(\?.*)?$/i,
-        parallel: true,
-        sourceMap: true
-      })
-    ]
-  },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'styles/[name].[contentHash].css',
+      filename: 'styles/[name].bundle.css',
       chunkFilename: '[id].css'
     }),
   ],
-  output: {
-    filename: '[name].[contentHash].js',
-    path: path.resolve(ROOT_DIRECTORY, 'build'),
-  }
+  optimization: {
+    minimize: true,
+    minimizer: [new CssMinimizerPlugin(), "..."],
+    runtimeChunk: {
+      name: 'runtime',
+    },
+  },
 });

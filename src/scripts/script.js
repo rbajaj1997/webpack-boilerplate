@@ -1,2 +1,1 @@
-console.log("Hahha -lol");
-// add custom js below
+console.log("My Webpack Configuration");
