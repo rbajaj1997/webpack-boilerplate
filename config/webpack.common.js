@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ROOT_DIRECTORY = process.cwd();
 
 module.exports = {
-  entry: path.resolve(ROOT_DIRECTORY, 'src/index.js'),
+  entry: path.resolve(ROOT_DIRECTORY, 'src/index.ts'),
   module: {
     rules: [
       {
@@ -25,11 +25,14 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-            plugins: ["@babel/transform-runtime"]
+            plugins: ['@babel/transform-runtime']
           }
         }
       }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -38,6 +41,6 @@ module.exports = {
       filename: 'index.html',
       template: path.resolve(ROOT_DIRECTORY, 'src/index.html'),
       inject: 'head'
-    }),
+    })
   ]
 };

@@ -1,7 +1,7 @@
 const path = require('path');
-const webpack = require('webpack')
+const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
+const common = require('./webpack.common');
 
 const ROOT_DIRECTORY = process.cwd();
 
@@ -13,7 +13,7 @@ module.exports = merge(common, {
     writeToDisk: true,
     open: true,
     hot: true,
-    port: 3000,
+    port: 3001
   },
   module: {
     rules: [
@@ -24,6 +24,11 @@ module.exports = merge(common, {
             loader: 'html-loader'
           }
         ]
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -47,9 +52,7 @@ module.exports = merge(common, {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(ROOT_DIRECTORY, 'build'),
+    path: path.resolve(ROOT_DIRECTORY, 'build')
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-  ],
+  plugins: [new webpack.HotModuleReplacementPlugin()]
 });
